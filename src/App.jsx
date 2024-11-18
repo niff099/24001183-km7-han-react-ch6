@@ -43,6 +43,7 @@ function App() {
   const [shops, setShops] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [filter, setFilter] = useState("");
   // const [count, setCount] = useState(0);
   const listMenu = ["About Me", "FAQ", "Logout"];
 
@@ -74,8 +75,9 @@ function App() {
     fetchShops();
   }, []);
 
-  console.log(shops);
-
+  const filteredShops = shops.filter((shop) =>
+    shop.products[0].name.toLowerCase().includes(filter.toLowerCase())
+  );
   return (
     <>
       {/* <RouterProvider router={router} /> */}
@@ -107,12 +109,22 @@ function App() {
           Register
         </button>
       </header>
+
+      <div className="mb-4">
+        <input
+          type="text"
+          value={filter}
+          onChange={(e) => setFilter(e.target.value)}
+          placeholder="Cari nama produk..."
+          className="p-2 border rounded-md w-full"
+        />
+      </div>
       <main className=""></main>
-      {loading && <p>loading...</p>}
+      {loading && <p>loading</p>}
       {error && <p className="text-red-500">{error}</p>}
       {!loading && !error && (
         <section className="max-w-6xl mx-auto mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {shops.map((shop, index) => (
+          {filteredShops.map((shop, index) => (
             <div
               key={index}
               className="p-4 border rounded-md bg-white shadow-md"
